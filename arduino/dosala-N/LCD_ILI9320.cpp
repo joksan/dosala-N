@@ -3,9 +3,9 @@
 #include <SPI.h>
 #include "LCD_ILI9320.h"
 
-static const byte LCD_INSTR_SET_INDEX = 0x70;
-static const byte LCD_INSTR_DATA_WR = 0x72;
-static const byte LCD_INSTR_DATA_RD = 0x73;
+static const uint8_t LCD_INSTR_SET_INDEX = 0x70;
+static const uint8_t LCD_INSTR_DATA_WR = 0x72;
+static const uint8_t LCD_INSTR_DATA_RD = 0x73;
 
 LCD_ILI9320::LCD_ILI9320(int pin_cs, int pin_reset):
   pinCS(pin_cs), pinReset(pin_reset)
@@ -38,6 +38,8 @@ void LCD_ILI9320::inicializar() {
 
   //Se intenta detectar la pantalla
   if (leerReg(0x00) != 0x9320) {
+    //Si no se detecta, se bloquea el flujo hasta que se conecte un puerto serie y se envia el mensaje
+    while(!Serial);
     Serial.println("Pantalla no detectada!");
     return;
   }
@@ -91,6 +93,14 @@ void LCD_ILI9320::inicializar() {
   //Finalmente se habilita el display
   escribirReg(0x07, 0x0133); //Display Control: PDTE=00, BASEE=1, GON=1, DTE=1, CL=0, D=11
   delay(100);
+}
+
+void LCD_ILI9320::limpiar(uint16_t color) {
+  blitSol(0,   0, 240, 64, color);
+  blitSol(0,  64, 240, 64, color);
+  blitSol(0, 128, 240, 64, color);
+  blitSol(0, 192, 240, 64, color);
+  blitSol(0, 256, 240, 64, color);
 }
 
 void LCD_ILI9320::blitImg(uint16_t x, uint16_t y, uint16_t ancho,
@@ -168,7 +178,7 @@ void LCD_ILI9320::selReg(uint8_t reg) {
 }
 
 uint16_t LCD_ILI9320::leerReg(uint8_t reg) {
-  byte datoL, datoH;
+  uint8_t datoL, datoH;
 
   //Selecciona el registro a acceder
   digitalWrite(pinCS, LOW);

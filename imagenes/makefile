@@ -1,9 +1,9 @@
 .PHONY: generar
 .PHONY: clean
 
-generar: generador_z1.c
-	gcc $< -trigraphs -o generador_z1
-	./generador_z1
+generar: generador.c
+	gcc $< -trigraphs -o generador
+	./generador
 
 clean:
-	rm generador_z1
+	rm generador
