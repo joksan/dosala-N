@@ -50,6 +50,30 @@ Pantalla LCD (HY28A-LCDB con controlador ILI9320):
 
 La libreria de la LCD no existe para arduino ni teensy, pero yo mismo la cree y viene con el codigo :-).
 
+Modificando las imagenes
+------------------------
+Si te interesa agregar texturas diferentes para las celdas del juego, puedes editar las imagenes con el editor de imagenes Gimp o crear las tuyas propias! Tan solo asegurate de respetar las dimensiones de las mismas.
+
+Una vez tengas tus nuevas texturas, exportalas desde gimp usando el formato de codigo C (C source code), y en las opciones que aparecen haz los siguientes cambios:
+- En "prefixed name" usa el mismo nombre del archivo (letras minusculas, separados con guiones bajos). Procura no cambiar los nombres de los archivos para no tener problemas con el codigo.
+- "Save comment to file" debe estar apagado.
+- "Use GLib types (guint8*)" debe estar apagado.
+- "Use macros instead of struct" debe estar ENCENDIDO.
+- "Use 1 byte Run-Length Encoding" debe estar apagado.
+- "Save alpha channel (RGBA/RGB)" debe estar apagado.
+- "Save as RGB565 (16-bit)" debe estar apagado.
+- La opacidad dejala al 100%.
+
+Nota: La version de gimp usada a la fecha de este escrito era la 2.8.10.
+
+Luego, tras exportar las imagenes, corre el makefile incluido en el folder de imagenes usando el comando "make" (si no sabes que es un makefile, te recomiendo leer un tutorial de bash primero y de ahi estudiar make, veras es super simple). El makefile compilara el programa que lee las imagenes y acto seguido lo ejecutara, actualizando las imagenes directamente en el folder de sprites del sketch de Arduino.
+
+En este momento puedes correr "make clean" si quieres eliminar el programa convertidor (siempre puedes volver a generarlo).
+
+Todo listo! ahora desde Arduino IDE sube el sketch a tu teensy y prueba tus nuevas texturas.
+
+Si tienes un juego de texturas genial que te gustaria compartir, acepto pull requests :-). En cuyo caso asegurate de colocar tus imagenes en un directorio separado. La idea es correr make desde cada folder con imagenes para que actualice las imagenes en el sketch y asi solo se suben.
+
 Licencias
 ---------
-Todo el codigo esta publicado bajo licencia GPL version 3 (ver archivo adjunto). Las imagenes estan bajo creative commons Reconocimiento-CompartirIgual version 4.0: http://creativecommons.org/licenses/by-sa/4.0/
+Todo el codigo esta publicado bajo licencia GPL version 3 (ver archivo adjunto). Las imagenes estan bajo creative commons Reconocimiento-CompartirIgual version 4.0: https://creativecommons.org/licenses/by-sa/4.0/deed.es_ES
